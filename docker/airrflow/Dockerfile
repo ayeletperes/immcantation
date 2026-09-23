@@ -84,6 +84,14 @@ RUN IGPHYML=$(versions get -n igphyml) \
 # Setup environment
 ENV PATH="${PATH}:/usr/local/share/igphyml/src"
 
+# Install PIgLET and RAbHIT, for allele based genotype inference and haplotype
+# inference. Both come from their tags: the CRAN releases are older than what the
+# enchantr reports use.
+RUN PIGLET_VER=$(versions get -n piglet) \
+    && RABHIT_VER=$(versions get -n rabhit) \
+    && Rscript -e "devtools::install_github('ayeletperes/piglet', ref='${PIGLET_VER}', quiet=FALSE, clean=TRUE)" \
+    && Rscript -e "devtools::install_github('ayeletperes/rabhit', ref='${RABHIT_VER}', quiet=FALSE, clean=TRUE)"
+
 # Install enchantr
 RUN ENCHANTR_VER=$(versions get -n enchantr) \
     && Rscript -e "devtools::install_github('immcantation/enchantr', ref='${ENCHANTR_VER}', quiet=FALSE, clean=TRUE)"
